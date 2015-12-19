@@ -30,7 +30,18 @@ p1 <- ggplot(data = mytable) +
 
 
 ## What is the average daily activity pattern?
-
+```{r, echo = TRUE}
+mytable2 <- myfile %>% group_by(interval, date) %>% summarise(steps = mean(steps))
+plot(mytable2$interval, mytable2$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
+summary(mytable2)
+```
+## The time series plot looks different than the example because of the interval setting as in the assignment. 
+## From the summary of mytable2, we get the maximum number of steps taken in an interval is 806.
+## The corresponding 5-minute interval for the maximum number of steps taken is 615, as detected by :
+ ```{r. echo= TRUE}
+ mytable2$interval[match(806, mytable2$steps)]
+ ```
+## The total number of missing vlaues(NA's) is 2304 (from the summary of mytable2)
 
 
 ## Imputing missing values
