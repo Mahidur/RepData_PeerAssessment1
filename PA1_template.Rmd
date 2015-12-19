@@ -4,14 +4,29 @@ output:
   html_document:
     keep_md: true
 ---
-
+## The data was downloaded from the web (url:"https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip") and stored in the "PeerAssessment 1" folder. 
 
 ## Loading and preprocessing the data
+```{r, echo = TRUE}
+setwd("~/Desktop/Data_Science_Course/Reproducible Research/PeerAssessment 1")
+unzip("repdata-data-activity.zip", exdir =".", unzip = "internal", setTimes = TRUE)
+myfile <- read.csv("activity.csv")
+library(dplyr) 
+library(ggplot2)
+mytable <- myfile %>% group_by(date) %>% summarise(steps= sum(steps))
+p1 <- ggplot(data = mytable) + 
++ aes(x = date, y = steps)+
++ geom_bar(stat = "identity", fill = "black")
+ p1 + theme(axis.text.x = element_text(angle = 45))
+```
 
 
 
 ## What is mean total number of steps taken per day?
-
+```{r, echo = TRUE}
+ summary(mytable)
+ ```
+ ## The mean steps per day is 10766 and the median is 10765. 
 
 
 ## What is the average daily activity pattern?
