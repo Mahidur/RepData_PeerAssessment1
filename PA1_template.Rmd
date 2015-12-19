@@ -16,7 +16,7 @@ library(ggplot2)
 mytable <- myfile %>% group_by(date) %>% summarise(steps= sum(steps))
 p1 <- ggplot(data = mytable) + 
 + aes(x = date, y = steps)+
-+ geom_bar(stat = "identity", fill = "black")
++ geom_histogram(stat = "identity", fill = "black")
  p1 + theme(axis.text.x = element_text(angle = 45))
 ```
 
