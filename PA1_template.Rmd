@@ -13,14 +13,14 @@ unzip("repdata-data-activity.zip", exdir =".", unzip = "internal", setTimes = TR
 myfile <- read.csv("activity.csv")
 library(dplyr) 
 library(ggplot2)
-mytable <- myfile %>% group_by(date, interval) %>% summarise(steps= sum(steps))
+mytable <- myfile %>% group_by(date) %>% summarise(steps= sum(steps))
 p1 <- ggplot(data = mytable) + 
 + aes(x = date, y = steps)+
 + geom_histogram(stat = "identity", fill = "black")
  p1 + theme(axis.text.x = element_text(angle = 45))
  summary(mytable)
  ```
- ## The mean steps per day is 37.38 and median is 0. 
+ ## The mean steps per day is 10766 and median is 10765. 
  
  ## What is the average daily activity pattern?
  
@@ -65,9 +65,14 @@ For simplicity, the missing values for the steps are replaced with the mean step
  summary(mytable)
  summary(newtable) 
  ```
- ## The mean steps per day is 37.38 and median is 0. 
- ## There is no change in the mean and median values for steps per day. 
- ## There is no impact of missing data on the estimates of the total daily number of steps.
+ ## The mean steps per day is 10766 and median is 10766. 
+ ## There is no change in the mean. The median changes by 1 step only. 
+ ## There is no significant impact for imputing the missing data on the estimates of the total daily number of steps.
+ 
+ 
+ Are there differences in activity patterns between weekdays and weekends?
+ ```{r, echo = TRUE}
+ levelstable <- newtable
  
  
 # Are there differences in activity patterns between weekdays and weekends?
