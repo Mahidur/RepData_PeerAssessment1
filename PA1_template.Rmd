@@ -71,10 +71,10 @@ For simplicity, the missing values for the steps are replaced with the mean step
  ## There is no significant impact for imputing the missing data on the estimates of the total daily number of steps.
  
  
- Are there differences in activity patterns between weekdays and weekends?
+ ##  Are there differences in activity patterns between weekdays and weekends?
  ```{r, echo = TRUE}
  datetable <- mutate(newtable, day= as.Date(date))
- stepsdate <- select(datetable, steps, day)
+ stepsdate <- select(datetable, interval, steps, day)
  stepsdateday <- mutate(stepsdate, WEEKDAY = weekdays(day))
  stepsdateday$WEEKDAY <- factor(stepsdateday$WEEKDAY)
  days <- list(weekend = c("Saturday", "Sunday"), weekday= c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"))
@@ -90,4 +90,3 @@ For simplicity, the missing values for the steps are replaced with the mean step
  plot(mytable$interval, mytable$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
  plot(weekdayactivity$interval, weekdayactivity$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
  ```
- 
