@@ -1,14 +1,18 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: "PeerAssignment1"
+author: "MMR"
+date: "December 20, 2015"
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+  pdf_document: default
+  word_document: default
 ---
-## The data was downloaded from the web (url:"https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip") and stored in the "PeerAssessment 1" folder. 
 
 ## Loading and preprocessing the data
-```{r, echo = TRUE}
-setwd("~/RepData_PeerAssessment1")
+
+```{r, echo=TRUE}
+setwd("~/Desktop/Data_Science_Course/Reproducible Research/PeerAssessment 1")
 unzip("repdata-data-activity.zip", exdir =".", unzip = "internal", setTimes = TRUE)
 myfile <- read.csv("activity.csv")
 library(dplyr) 
@@ -32,12 +36,13 @@ geom_histogram(stat = "identity", fill = "black")
  
  ##  as in the summary of mytable2, we get the maximum number of steps taken in an interval is 806. It is confirmed by 
  ```{r, echo = TRUE}
+ mytable2 <- myfile %>% group_by(interval, date) %>% summarise(steps = mean(steps))
  max_steps <- max(mytable2$steps, na.rm = TRUE)
  max_steps
  ```
  
  ## The corresponding 5-minute interval is 615, as detected by :
- ```{r. echo= TRUE}
+ ```{r, echo= TRUE}
  mytable2$interval[match(806, mytable2$steps)]
  ```
  ## Imputing missing values
@@ -71,7 +76,7 @@ For simplicity, the missing values for the steps are replaced with the mean step
  ## There is no significant impact for imputing the missing data on the estimates of the total daily number of steps.
  
  
- ##  Are there differences in activity patterns between weekdays and weekends?
+##  Are there differences in activity patterns between weekdays and weekends?
  ```{r, echo = TRUE}
  datetable <- mutate(newtable, day= as.Date(date))
  stepsdate <- select(datetable, interval, steps, day)
