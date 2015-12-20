@@ -52,15 +52,33 @@ missing_val
 ```
 
 ## Imputing missing values
-For simplicity, the missing values are imputed using the mean steps (37.38) for each interval as follows:
-```{r, echo = TRUE}
- newtable <- mytable2                                     ## makes a copy the table 
- replacement <- mean(mytable2$steps, na.rm = TRUE)        ## calculates the mean for steps to be used as replacement
- newtable$steps[is.na(newtable$steps)] <- replacement     ## replaces the missing values with the replacement value
- miss_val <- sum(is.na(newtable$steps))                   ## to confirm there is no missing value
+## For simplicity, the missing values for the steps are replaced with the mean steps/interval as follows
+ ```{r, echo = TRUE}
+ newtable <- mytable ## makes a copy the original data
+ replacement <- mean(mytable$steps, na.rm = TRUE) ## calculates the mean for steps to be used as replacement
+ newtable$steps[is.na(newtable$steps)] <- replacement ## replaces the missing values with the replacement value
+ miss_val <- sum(is.na(newtable$steps))  ## to confirm there is no missing value
  miss_val
- summary(newtable)                                ## to confirm that the mean, median and other features are not changing in the table
- ```
 
+ p2 <- ggplot(data = newtable) +             ## plotting the histogram
+ aes(x = date, y = steps)+
+ geom_histogram(stat = "identity", fill = "black")
+ p2 + theme(axis.text.x = element_text(angle = 45))
+```
+ ## The mean and median steps are 
+ ```{r, echo= TRUE}
+ newmeansteps <- mean(newtable$steps)
+ newmediansteps <- median(newtable$steps)
+ print(c(newmeansteps,newmediansteps))
+  ```
+  
+ ## to compare the mean, median and other features in the two tables
+ ```{r, echo = TRUE}
+ summary(mytable)
+ summary(newtable) 
+ ```
+ ## The median changed by one step after imputing the missing values. However, there is no change in the mean value for steps per day. 
+ ## There is no impact of missing data on the estimates of the total daily number of steps.
+ 
 
 ## Are there differences in activity patterns between weekdays and weekends?
