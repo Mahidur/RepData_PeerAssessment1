@@ -13,46 +13,34 @@ unzip("repdata-data-activity.zip", exdir =".", unzip = "internal", setTimes = TR
 myfile <- read.csv("activity.csv")
 library(dplyr) 
 library(ggplot2)
-mytable <- myfile %>% group_by(date) %>% summarise(steps= sum(steps))
+mytable <- myfile %>% group_by(date, interval) %>% summarise(steps= sum(steps))
 p1 <- ggplot(data = mytable) + 
 + aes(x = date, y = steps)+
 + geom_histogram(stat = "identity", fill = "black")
  p1 + theme(axis.text.x = element_text(angle = 45))
-```
-
-
-
-## What is mean total number of steps taken per day?
-```{r, echo = TRUE}
  summary(mytable)
  ```
- ## The mean steps per day is 10766 and the median is 10765. 
-
-
-## What is the average daily activity pattern?
-```{r, echo = TRUE}
-mytable2 <- myfile %>% group_by(interval, date) %>% summarise(steps = mean(steps))
-plot(mytable2$interval, mytable2$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
-summary(mytable2)
-```
-## The time series plot looks different than the example because of the interval setting as in the assignment. 
-## From the summary of mytable2, we get the maximum number of steps taken in an interval is 806. It is confirmed by 
+ ## The mean steps per day is 37.38 and median is 0. 
+ 
+ ## What is the average daily activity pattern?
+ 
+ ## Average steps taken per day 
+ mytable2 <- myfile %>% group_by(interval, date) %>% summarise(steps = mean(steps))
+ plot(mytable2$interval, mytable2$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
+ summary(mytable2)
+ 
+ ##  as in the summary of mytable2,we get the maximum number of steps taken in an interval is 806. It is confirmed by 
  ```{r, echo = TRUE}
  max_steps <- max(mytable2$steps, na.rm = TRUE)
  max_steps
  ```
-## The corresponding 5-minute interval for the maximum number of steps taken is 615, as detected by :
+ 
+ ## The corresponding 5-minute interval is 615, as detected by :
  ```{r. echo= TRUE}
  mytable2$interval[match(806, mytable2$steps)]
  ```
-## The total number of missing vlaues(NA's) is 2304 (from the summary of mytable2). It can be confirmed as follows-
-```{r, echo = TRUE}
-missing_val<- sum(is.na(mytable2$steps))
-missing_val
-```
-
-## Imputing missing values
-## For simplicity, the missing values for the steps are replaced with the mean steps/interval as follows
+ ## Imputing missing values
+For simplicity, the missing values for the steps are replaced with the mean steps/interval as follows
  ```{r, echo = TRUE}
  newtable <- mytable ## makes a copy the original data
  replacement <- mean(mytable$steps, na.rm = TRUE) ## calculates the mean for steps to be used as replacement
@@ -77,8 +65,9 @@ missing_val
  summary(mytable)
  summary(newtable) 
  ```
- ## The median changed by one step after imputing the missing values. However, there is no change in the mean value for steps per day. 
+ ## The mean steps per day is 37.38 and median is 0. 
+ ## There is no change in the mean and median values for steps per day. 
  ## There is no impact of missing data on the estimates of the total daily number of steps.
  
-
-## Are there differences in activity patterns between weekdays and weekends?
+ 
+# Are there differences in activity patterns between weekdays and weekends?
