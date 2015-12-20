@@ -13,12 +13,13 @@ unzip("repdata-data-activity.zip", exdir =".", unzip = "internal", setTimes = TR
 myfile <- read.csv("activity.csv")
 library(dplyr) 
 library(ggplot2)
-mytable <- myfile %>% group_by(date) %>% summarise(steps= sum(steps))
+mytable <- myfile %>% group_by(date, interval) %>% summarise(steps= sum(steps))
 p1 <- ggplot(data = mytable) + 
-+ aes(x = date, y = steps)+
-+ geom_histogram(stat = "identity", fill = "black")
+aes(x = date, y = steps)+
+geom_histogram(stat = "identity", fill = "black")
  p1 + theme(axis.text.x = element_text(angle = 45))
- summary(mytable)
+ meanstepspd <- mytable %>% group_by(date) %>% summarise(steps= mean(steps))
+ summary(meanstepspd)
  ```
  ## The mean steps per day is 10766 and median is 10765. 
  
@@ -29,7 +30,7 @@ p1 <- ggplot(data = mytable) +
  plot(mytable2$interval, mytable2$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
  summary(mytable2)
  
- ##  as in the summary of mytable2,we get the maximum number of steps taken in an interval is 806. It is confirmed by 
+ ##  as in the summary of mytable2, we get the maximum number of steps taken in an interval is 806. It is confirmed by 
  ```{r, echo = TRUE}
  max_steps <- max(mytable2$steps, na.rm = TRUE)
  max_steps
@@ -72,7 +73,21 @@ For simplicity, the missing values for the steps are replaced with the mean step
  
  Are there differences in activity patterns between weekdays and weekends?
  ```{r, echo = TRUE}
- levelstable <- newtable
+ datetable <- mutate(newtable, day= as.Date(date))
+ stepsdate <- select(datetable, steps, day)
+ stepsdateday <- mutate(stepsdate, WEEKDAY = weekdays(day))
+ stepsdateday$WEEKDAY <- factor(stepsdateday$WEEKDAY)
+ days <- list(weekend = c("Saturday", "Sunday"), weekday= c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"))
+ levels(stepsdateday$WEEKDAY) <-days
+ weekdayactivity <- stepsdateday %>% group_by(interval, WEEKDAY) %>% summarise(steps = mean(steps))
+ meanweekdayactivity <- weekdayactivity %>% group_by(WEEKDAY) %>% summarise(steps = mean(steps))
+ meanweekdayactivity
+ ```
+ ## Average number of steps taken in weekend is 42.366 and the same on weekday is 35.610. A slightly higher activity in the weekend. 
  
+ ```{r, echo = TRUE}
+ par(mfrow = c(2, 1))
+ plot(mytable$interval, mytable$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
+ plot(weekdayactivity$interval, weekdayactivity$steps, xlab = "interval", ylab = "mean steps per day",  type = "l")
+ ```
  
-# Are there differences in activity patterns between weekdays and weekends?
